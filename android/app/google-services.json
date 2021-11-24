@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "501788235196",
+    "project_id": "gsu-eats",
+    "storage_bucket": "gsu-eats.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501788235196:android:ce6d250abcd31930af87b9",
+        "android_client_info": {
+          "package_name": "com.example.gsu_eats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501788235196-slg3mjt53jr4q3aknhpenvj8nb2ll6ji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd5NmBMMdxpJ0eSGsXKV6XkTmLl6NrKwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501788235196-slg3mjt53jr4q3aknhpenvj8nb2ll6ji.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

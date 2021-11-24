@@ -35,6 +35,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//A class that checks whether the user is logged in or not.
+//If logged in, the the body of the scaffold will be the home page.
+//If not logged in, the body of the scaffold is now the login page.
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({Key? key}) : super(key: key);
 

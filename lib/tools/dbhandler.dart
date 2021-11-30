@@ -27,13 +27,17 @@ class DBServ {
     String restaurantID = const Uuid().v4();
 
     try {
+      if (restaurant.name == '') {
+        throw Exception('No name');
+      }
       restaurantDB
           .doc(restaurantID)
           .set({'name': restaurant.name, 'ratings': restaurant.ratings});
     } catch (err) {
+      String msg = 'Adding Restaurant failed... $err';
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Adding Restaurant failed..'),
+        SnackBar(
+          content: Text(msg),
         ),
       );
       return false;

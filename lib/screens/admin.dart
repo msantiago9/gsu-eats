@@ -11,10 +11,10 @@ class Admin extends StatefulWidget {
 }
 
 class _AdminState extends State<Admin> {
+  final dbserve = DBServ();
   final name = TextEditingController();
   List<int> ratings = [3, 3, 3];
   List<Widget> restaurants = [];
-  final dbserve = DBServ();
   bool hasSearched = false;
 
   void _updateRestaurantsList(Restaurant restaurant) {
@@ -168,9 +168,10 @@ class _AdminState extends State<Admin> {
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (!hasSearched) {
-                      List<Restaurant> collection = dbserve.getRestaurants;
+                      List<Restaurant> collection =
+                          await dbserve.getRestaurants();
                       for (var restaurant in collection) {
                         _updateRestaurantsList(restaurant);
                       }

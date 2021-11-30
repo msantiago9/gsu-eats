@@ -45,19 +45,8 @@ class DBServ {
     return true;
   }
 
-  List<Restaurant> get getRestaurants {
-    Stream<List<Restaurant>> collection = _getrestaurants;
-    List<Restaurant> restaurants = [];
-    collection.forEach((doc) {
-      for (var restaurant in doc) {
-        restaurants = [...restaurants, restaurant];
-      }
-    });
-    return restaurants;
-  }
-
-  Stream<List<Restaurant>> get _getrestaurants {
-    return restaurantDB.snapshots().map(restaurantListFromSnapshot);
+  Future<List<Restaurant>> getRestaurants() async {
+    return await restaurantDB.snapshots().map(restaurantListFromSnapshot).first;
   }
 
   //message list from snapshot
@@ -69,5 +58,25 @@ class DBServ {
       mylist.add(Restaurant(name: name, ratings: ratings));
     }
     return mylist;
+  }
+
+  Future<bool> hasRestaurant(String name) async {
+    List<Restaurant> collection = await getRestaurants();
+    for (Restaurant current in collection) {
+      if (current.name == name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<Restaurant> getRestaurant(String name) async {
+    List<Restaurant> collection = await getRestaurants();
+    for (Restaurant current in collection) {
+      if (current.name == name) {
+        return current;
+      }
+    }
+    return Restaurant(name: '', ratings: []);
   }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gsu_eats/screens/restaurantpage.dart';
+import 'package:gsu_eats/tools/dbhandler.dart';
+import 'package:gsu_eats/models/restaurant.dart';
 
 class Search extends StatelessWidget {
+  final dbserve = DBServ();
   final TextEditingController query = TextEditingController();
   Search({Key? key}) : super(key: key);
 
@@ -28,11 +32,22 @@ class Search extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  //ToDo add search
+                onPressed: () async {
+                  if (await dbserve.hasRestaurant(query.text)) {
+                    Restaurant restaurant =
+                        await dbserve.getRestaurant(query.text);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RestaurantPage(
+                          restaurant: restaurant,
+                        ),
+                      ),
+                    );
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Search to be implemented :)'),
+                      content: Text('Srearch to be implemented :)'),
                     ),
                   );
                 },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gsu_eats/screens/popular.dart';
 import 'package:gsu_eats/screens/recommended.dart';
+import 'package:gsu_eats/screens/admin.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -51,6 +52,20 @@ class _HomeState extends State<Home> {
                 );
               },
               child: const Text("Recommended For Me"),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Admin(),
+                  ),
+                );
+              },
+              child: const Text("Admin"),
             ),
           ),
         ],

@@ -44,12 +44,13 @@ class Search extends StatelessWidget {
                         ),
                       ),
                     );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('No restaurant found.'),
+                      ),
+                    );
                   }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Srearch to be implemented :)'),
-                    ),
-                  );
                 },
                 child: const Text("Search"),
               ),

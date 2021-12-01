@@ -33,15 +33,14 @@ class Search extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  if (await dbserve.hasRestaurant(query.text)) {
+                  if (await dbserve.isRestaurant(query.text)) {
                     Restaurant restaurant =
                         await dbserve.getRestaurant(query.text);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RestaurantPage(
-                          restaurant: restaurant,
-                        ),
+                        builder: (context) =>
+                            RestaurantPage(restaurant: restaurant),
                       ),
                     );
                   } else {

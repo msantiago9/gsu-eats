@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gsu_eats/tools/dbhandler.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gsu_eats/models/restaurant.dart';
+import 'package:uuid/uuid.dart';
 
 class Admin extends StatefulWidget {
   const Admin({Key? key}) : super(key: key);
@@ -140,8 +141,10 @@ class _AdminState extends State<Admin> {
                 margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                 child: ElevatedButton(
                   onPressed: () {
-                    Restaurant toDatabase =
-                        Restaurant(name: name.text, ratings: ratings);
+                    Restaurant toDatabase = Restaurant(
+                        uuid: const Uuid().v4(),
+                        name: name.text,
+                        ratings: ratings);
                     bool success = dbserve.addRestaurant(toDatabase, context);
                     if (success && hasSearched) {
                       _updateRestaurantsList(toDatabase);

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 class Login extends StatelessWidget {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
-
   Login({Key? key}) : super(key: key);
 
   @override
@@ -58,17 +57,9 @@ class Login extends StatelessWidget {
                   margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      bool success = await context.read<AuthService>().signIn(
-                            email: email.text,
-                            password: password.text,
-                          );
-                      if (!success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Login failed.'),
-                          ),
-                        );
-                      }
+                      await context
+                          .read<AuthService>()
+                          .signIn(email.text, password.text, context);
                     },
                     child: const Text(
                       "Login",

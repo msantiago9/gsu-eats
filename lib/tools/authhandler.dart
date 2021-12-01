@@ -1,4 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:gsu_eats/models/user.dart';
+import 'package:gsu_eats/tools/dbhandler.dart';
 
 class AuthService {
   final FirebaseAuth _authHandler;
@@ -9,15 +12,25 @@ class AuthService {
   Stream<User?> get authStateChanges => _authHandler.authStateChanges();
 
   //Signs the user in with email and password.
-  Future<bool> signIn({required String email, required String password}) async {
+  Future<UserData> signIn(
+    String email,
+    String password,
+    BuildContext context,
+  ) async {
     try {
-      await _authHandler.signInWithEmailAndPassword(
+      UserCredential _user = await _authHandler.signInWithEmailAndPassword(
           email: email, password: password);
-      return true;
+
+      String uuid = _user.user!.uid;
+      return DBServ().getUserByUUID(uuid);
     } on FirebaseAuthException catch (error) {
-      // ignore: avoid_print
-      print("error: $error.message");
-      return false;
+      String msg = 'SignIn failed... $error';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(msg),
+        ),
+      );
+      return UserData(name: '', ratings: {}, uuid: '');
     }
   }
 

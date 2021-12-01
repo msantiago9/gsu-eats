@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gsu_eats/models/user.dart';
 import 'package:gsu_eats/screens/homepage.dart';
 import 'package:gsu_eats/screens/login.dart';
 import 'package:gsu_eats/tools/authhandler.dart';
 import 'package:provider/provider.dart';
-
 import 'screens/search.dart';
 
 class MyApp extends StatelessWidget {
@@ -38,13 +38,18 @@ class MyApp extends StatelessWidget {
 //A class that checks whether the user is logged in or not.
 //If logged in, the the body of the scaffold will be the home page.
 //If not logged in, the body of the scaffold is now the login page.
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({Key? key}) : super(key: key);
 
   @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  final currentUser = UserData(name: '', ratings: {}, uuid: '');
+  @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
-
     //If the user is logged in
     // ignore: unnecessary_null_comparison
     if (firebaseUser != null) {

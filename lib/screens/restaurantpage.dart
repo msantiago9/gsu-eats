@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gsu_eats/models/restaurant.dart';
+import 'package:gsu_eats/models/user.dart';
+import 'package:gsu_eats/tools/dbhandler.dart';
 
 class RestaurantPage extends StatefulWidget {
   final Restaurant restaurant;
@@ -11,6 +14,29 @@ class RestaurantPage extends StatefulWidget {
 }
 
 class _RestaurantState extends State<RestaurantPage> {
+  int currentRating = 0;
+
+  @override
+  void initState() async {
+    super.initState();
+    // NOTE: Calling this function here would crash the app.
+    await DBServ()
+        .getUserByUUID(FirebaseAuth.instance.currentUser!.uid)
+        .then((user) => initRating(user));
+  }
+
+  void initRating(UserData user) {
+    if (user.rated(widget.restaurant.uuid)) {
+      setState(() {
+        currentRating = user.getRating(widget.restaurant.uuid);
+      });
+    } else {
+      setState(() {
+        currentRating = 0;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +77,7 @@ class _RestaurantState extends State<RestaurantPage> {
                 minRating: 1,
                 direction: Axis.horizontal,
                 allowHalfRating: false,
+                ignoreGestures: true,
                 itemCount: 5,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                 itemBuilder: (context, _) => const Icon(
@@ -68,6 +95,42 @@ class _RestaurantState extends State<RestaurantPage> {
                   fontFamily: 'Kurale',
                   fontSize: 20,
                 ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 25, 0, 5),
+              child: const Text(
+                "Leave your rating",
+                style: TextStyle(
+                  fontFamily: 'Kurale',
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+              child: RatingBar.builder(
+                initialRating: currentRating.toDouble(),
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: false,
+                itemCount: 5,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) async {
+                  UserData user = await DBServ()
+                      .getUserByUUID(FirebaseAuth.instance.currentUser!.uid);
+                  if (!user.rated(widget.restaurant.uuid)) {
+                    user.addRating(widget.restaurant.uuid, currentRating);
+                    widget.restaurant.addRating(currentRating);
+                  }
+                  setState(() {
+                    currentRating = rating.round();
+                  });
+                },
               ),
             ),
           ],

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gsu_eats/tools/authhandler.dart';
 import 'package:provider/provider.dart';
+import 'package:gsu_eats/tools/dbhandler.dart';
 
 class SignUp extends StatelessWidget {
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final name = TextEditingController();
 
   SignUp({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class SignUp extends StatelessWidget {
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Image.asset(
                 "assets/gsulogo.png",
-                height: 150,
+                height: 100,
               ),
             ),
             Container(
@@ -38,6 +40,13 @@ class SignUp extends StatelessWidget {
               controller: email,
               decoration: const InputDecoration(
                 labelText: "email",
+              ),
+              autocorrect: false,
+            ),
+            TextField(
+              controller: name,
+              decoration: const InputDecoration(
+                labelText: "Name",
               ),
               autocorrect: false,
             ),
@@ -62,14 +71,15 @@ class SignUp extends StatelessWidget {
                               email: email.text,
                               password: password.text,
                             );
-                        if (success) {
-                          Navigator.pop(context);
-                        } else {
+                        if (!success) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Sign up failed.'),
                             ),
                           );
+                        } else {
+                          await DBServ().addUser(name.text, context);
+                          Navigator.pop(context);
                         }
                       },
                       child: const Text(

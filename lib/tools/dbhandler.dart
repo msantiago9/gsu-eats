@@ -21,7 +21,7 @@ class DBServ {
   // }
 
   bool addRestaurant(Restaurant restaurant, BuildContext context) {
-    String restaurantID = const Uuid().v4();
+    String restaurantID = restaurant.uuid;
 
     try {
       if (restaurant.name == '') {

@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:gsu_eats/models/restaurant.dart';
 import 'package:gsu_eats/models/user.dart';
 
 class DBServ {
   //This class will contain a reference to the Firestore collection containing user data.
 
-  final CollectionReference userDB =
-      FirebaseFirestore.instance.collection('users');
+  CollectionReference userDB = FirebaseFirestore.instance.collection('users');
 
-  final CollectionReference restaurantDB =
+  CollectionReference restaurantDB =
       FirebaseFirestore.instance.collection('restaurants');
 
   // Since we no user first name and last name implemented yet, this function cannot be set.
@@ -94,22 +92,23 @@ class DBServ {
     for (var element in snap.docs) {
       String uuid = element.id;
       String name = element.get('name');
-      List<int> ratings = element.get('ratings').cast<int>();
-      mylist.add(Restaurant(uuid: uuid, name: name, ratings: ratings));
+      List<dynamic> ratings = element.get('ratings');
+      mylist.add(Restaurant(
+          uuid: uuid,
+          name: name,
+          ratings: ratings.map((s) => int.parse(s.toString())).toList()));
     }
     return mylist;
   }
 
-  Future addUser(String name, context) async {
-    String uuid = const Uuid().v4();
+  Future addUser(String name, String uid, context) async {
     //By default, the user is set to rate Subway at 1 star.
     Map<String, int> ratings = <String, int>{'6JBZPvJLAbhR6ucjv0Up': 1};
-
     try {
       if (name == '') {
         throw Exception('No name');
       }
-      userDB.doc(uuid).set({'name': name, 'ratings': ratings});
+      userDB.doc(uid).set({'name': name, 'ratings': ratings});
     } catch (err) {
       String msg = 'Adding Restaurant failed... $err';
       ScaffoldMessenger.of(context).showSnackBar(
@@ -151,13 +150,13 @@ class DBServ {
     for (var element in snap.docs) {
       String uuid = element.id;
       String name = element.get('name');
-      Map<String, int> ratings = element.get('ratings');
+      Map<String, int> ratings = Map<String, int>.from(element.get('ratings'));
       mylist.add(UserData(uuid: uuid, name: name, ratings: ratings));
     }
     return mylist;
   }
 
-  void updateRestaurant(Restaurant restaurant) async {
+  Future updateRestaurant(Restaurant restaurant) async {
     try {
       if (restaurant.name == '') {
         throw Exception('No name');
@@ -175,16 +174,17 @@ class DBServ {
     }
   }
 
-  void updateUser(String uid) async {
+  void updateUser(UserData current) async {
     try {
-      if (uid == '') {
+      if (current.uuid == '') {
         throw Exception('Not a valid uid.');
       }
-      if (!(await isUserByUUID(uid))) {
-        throw Exception('No such user with uid $uid exists.');
+      if (!(await isUserByUUID(current.uuid))) {
+        throw Exception('No such user with uid $current.uuid exists.');
       }
-      UserData user = await getUserByUUID(uid);
-      userDB.doc(user.uuid).set({'name': user.name, 'ratings': user.ratings});
+      userDB
+          .doc(current.uuid)
+          .set({'name': current.name, 'ratings': current.ratings});
     } catch (err) {
       // ignore: avoid_print
       print(err.toString());

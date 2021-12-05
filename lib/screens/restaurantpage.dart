@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gsu_eats/models/restaurant.dart';
 import 'package:gsu_eats/models/user.dart';
-import 'package:gsu_eats/tools/dbhandler.dart';
+import 'package:gsu_eats/models/globals.dart' as globals;
 
 class RestaurantPage extends StatefulWidget {
   final Restaurant restaurant;
@@ -17,12 +16,10 @@ class _RestaurantState extends State<RestaurantPage> {
   int currentRating = 0;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    // NOTE: Calling this function here would crash the app.
-    await DBServ()
-        .getUserByUUID(FirebaseAuth.instance.currentUser!.uid)
-        .then((user) => initRating(user));
+    initRating(UserData(
+        name: globals.name, uuid: globals.uuid, ratings: globals.ratings));
   }
 
   void initRating(UserData user) {
@@ -121,18 +118,41 @@ class _RestaurantState extends State<RestaurantPage> {
                   color: Colors.amber,
                 ),
                 onRatingUpdate: (rating) async {
-                  UserData user = await DBServ()
-                      .getUserByUUID(FirebaseAuth.instance.currentUser!.uid);
-                  if (!user.rated(widget.restaurant.uuid)) {
-                    user.addRating(widget.restaurant.uuid, currentRating);
-                    widget.restaurant.addRating(currentRating);
-                  }
                   setState(() {
                     currentRating = rating.round();
                   });
+                  UserData user = UserData(
+                      name: globals.name,
+                      uuid: globals.uuid,
+                      ratings: globals.ratings);
+                  if (!user.rated(widget.restaurant.uuid)) {
+                    user.addRating(widget.restaurant.uuid, currentRating);
+                    globals.ratings = user.ratings;
+                    widget.restaurant.addRating(currentRating);
+                  } else {
+                    int? rating = user.ratings[widget.restaurant.uuid];
+                    widget.restaurant.removeRating(rating!);
+                    user.addRating(widget.restaurant.uuid, currentRating);
+                    globals.ratings = user.ratings;
+                    widget.restaurant.addRating(currentRating);
+                  }
                 },
               ),
             ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+              child: Text(
+                'Username: ' + globals.name,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                globals.ratings.forEach((key, value) {
+                  print('$key: $value');
+                });
+              },
+              child: const Text('Test'),
+            )
           ],
         ),
         height: double.infinity,

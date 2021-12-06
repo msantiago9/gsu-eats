@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gsu_eats/models/user.dart';
 import 'package:gsu_eats/tools/dbhandler.dart';
+import 'package:gsu_eats/models/globals.dart' as globals;
 
 class AuthService {
   final FirebaseAuth _authHandler;
@@ -22,7 +23,13 @@ class AuthService {
           email: email, password: password);
 
       String uuid = _user.user!.uid;
-      return DBServ().getUserByUUID(uuid);
+      Future<UserData> current = DBServ().getUserByUUID(uuid);
+      current.then((user) {
+        globals.name = user.name;
+        globals.uuid = user.uuid;
+        globals.ratings = user.ratings;
+      });
+      return current;
     } on FirebaseAuthException catch (error) {
       String msg = 'SignIn failed... $error';
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,15 +42,23 @@ class AuthService {
   }
 
   //Attempts to create an account for the user on Firestore.
-  Future<bool> signUp({required String email, required String password}) async {
+  Future<String> signUp(
+      {required String email, required String password}) async {
     try {
-      await _authHandler.createUserWithEmailAndPassword(
+      UserCredential uc = await _authHandler.createUserWithEmailAndPassword(
           email: email, password: password);
-      return true;
+      String uid = uc.user!.uid;
+      Future<UserData> current = DBServ().getUserByUUID(uid);
+      current.then((user) {
+        globals.name = user.name;
+        globals.uuid = user.uuid;
+        globals.ratings = user.ratings;
+      });
+      return uid;
     } on FirebaseAuthException catch (error) {
       // ignore: avoid_print
       print("error: $error.message");
-      return false;
+      return "error";
     }
   }
 

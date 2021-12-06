@@ -4,8 +4,10 @@ import 'package:gsu_eats/models/user.dart';
 import 'package:gsu_eats/screens/homepage.dart';
 import 'package:gsu_eats/screens/login.dart';
 import 'package:gsu_eats/tools/authhandler.dart';
+import 'package:gsu_eats/tools/dbhandler.dart';
 import 'package:provider/provider.dart';
 import 'screens/search.dart';
+import 'package:gsu_eats/models/globals.dart' as globals;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -46,13 +48,18 @@ class AuthWrapper extends StatefulWidget {
 }
 
 class _AuthWrapperState extends State<AuthWrapper> {
-  final currentUser = UserData(name: '', ratings: {}, uuid: '');
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
     //If the user is logged in
     // ignore: unnecessary_null_comparison
     if (firebaseUser != null) {
+      Future<UserData> user = DBServ().getUserByUUID(firebaseUser.uid);
+      user.then((current) {
+        globals.uuid = current.uuid;
+        globals.name = current.name;
+        globals.ratings = current.ratings;
+      });
       return Scaffold(
         appBar: AppBar(
           actions: [

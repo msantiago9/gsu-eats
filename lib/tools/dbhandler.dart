@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:gsu_eats/models/restaurant.dart';
 import 'package:gsu_eats/models/user.dart';
 
 class DBServ {
   //This class will contain a reference to the Firestore collection containing user data.
 
-  final CollectionReference userDB =
-      FirebaseFirestore.instance.collection('users');
+  CollectionReference userDB = FirebaseFirestore.instance.collection('users');
 
-  final CollectionReference restaurantDB =
-      FirebaseFirestore.instance.collection('restaurants');
+  CollectionReference restaurantDB =
+      FirebaseFirestore.instance.collection('places');
 
   // Since we no user first name and last name implemented yet, this function cannot be set.
   // Future update(String fname, String lname, String type) async {
@@ -21,15 +19,21 @@ class DBServ {
   // }
 
   bool addRestaurant(Restaurant restaurant, BuildContext context) {
-    String restaurantID = const Uuid().v4();
+    String restaurantID = restaurant.uuid;
 
     try {
       if (restaurant.name == '') {
         throw Exception('No name');
       }
-      restaurantDB
-          .doc(restaurantID)
-          .set({'name': restaurant.name, 'ratings': restaurant.ratings});
+      restaurantDB.doc(restaurantID).set({
+        'name': restaurant.name,
+        'img': restaurant.img,
+        'details': restaurant.details,
+        'ratings': restaurant.ratings,
+        'comments': restaurant.comments,
+        'latitude': restaurant.latitude,
+        'longitude': restaurant.longitude,
+      });
     } catch (err) {
       String msg = 'Adding Restaurant failed... $err';
       ScaffoldMessenger.of(context).showSnackBar(
@@ -49,7 +53,16 @@ class DBServ {
         return current;
       }
     }
-    return Restaurant(uuid: '', name: '', ratings: []);
+    return Restaurant(
+      uuid: '',
+      name: '',
+      ratings: [],
+      comments: {},
+      details: '',
+      img: '',
+      latitude: '',
+      longitude: '',
+    );
   }
 
   Future<Restaurant> getRestaurantByUUID(String uuid) async {
@@ -59,7 +72,16 @@ class DBServ {
         return current;
       }
     }
-    return Restaurant(uuid: '', name: '', ratings: []);
+    return Restaurant(
+      uuid: '',
+      name: '',
+      ratings: [],
+      comments: {},
+      details: '',
+      img: '',
+      latitude: '',
+      longitude: '',
+    );
   }
 
   Future<List<Restaurant>> getRestaurants() async {
@@ -92,26 +114,49 @@ class DBServ {
   List<Restaurant> _restaurantListFromSnapshot(QuerySnapshot snap) {
     List<Restaurant> mylist = [];
     for (var element in snap.docs) {
-      String uuid = element.id;
-      String name = element.get('name');
-      List<int> ratings = element.get('ratings').cast<int>();
-      mylist.add(Restaurant(uuid: uuid, name: name, ratings: ratings));
+      // print(element.data());
+      try {
+        String uuid = element.id;
+        String name = element.get('name');
+        String details = element.get('details');
+        String img = element.get('img');
+        String lat = element.get('latitude');
+        String long = element.get('longitude');
+        List<dynamic> ratings = element.get('ratings');
+        Map<String, String> comments =
+            Map<String, String>.from(element.get('comments'));
+        mylist.add(
+          Restaurant(
+            uuid: uuid,
+            name: name,
+            ratings: ratings.map((s) => int.parse(s.toString())).toList(),
+            comments: comments,
+            details: details,
+            img: img,
+            latitude: lat,
+            longitude: long,
+          ),
+        );
+      } catch (err) {
+        String msg = err.toString();
+        // ignore: avoid_print
+        print("error was thrown... $msg");
+        continue;
+      }
     }
     return mylist;
   }
 
-  Future addUser(String name, context) async {
-    String uuid = const Uuid().v4();
+  Future addUser(String name, String uid, context) async {
     //By default, the user is set to rate Subway at 1 star.
-    Map<String, int> ratings = <String, int>{'6JBZPvJLAbhR6ucjv0Up': 1};
-
+    Map<String, int> ratings = <String, int>{'LiBCFqJmH3llBPYRk2RF': 1};
     try {
       if (name == '') {
         throw Exception('No name');
       }
-      userDB.doc(uuid).set({'name': name, 'ratings': ratings});
+      userDB.doc(uid).set({'name': name, 'ratings': ratings});
     } catch (err) {
-      String msg = 'Adding Restaurant failed... $err';
+      String msg = 'Adding User failed... $err';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(msg),
@@ -151,13 +196,13 @@ class DBServ {
     for (var element in snap.docs) {
       String uuid = element.id;
       String name = element.get('name');
-      Map<String, int> ratings = element.get('ratings');
+      Map<String, int> ratings = Map<String, int>.from(element.get('ratings'));
       mylist.add(UserData(uuid: uuid, name: name, ratings: ratings));
     }
     return mylist;
   }
 
-  void updateRestaurant(Restaurant restaurant) async {
+  Future updateRestaurant(Restaurant restaurant) async {
     try {
       if (restaurant.name == '') {
         throw Exception('No name');
@@ -166,25 +211,32 @@ class DBServ {
         throw Exception(
             'No such restaurant with name $restaurant.name exists.');
       }
-      restaurantDB
-          .doc(restaurant.uuid)
-          .set({'name': restaurant.name, 'ratings': restaurant.ratings});
+      restaurantDB.doc(restaurant.uuid).set({
+        'name': restaurant.name,
+        'img': restaurant.img,
+        'details': restaurant.details,
+        'ratings': restaurant.ratings,
+        'comments': restaurant.comments,
+        'latitude': restaurant.latitude,
+        'longitude': restaurant.longitude,
+      });
     } catch (err) {
       // ignore: avoid_print
       print(err.toString());
     }
   }
 
-  void updateUser(String uid) async {
+  void updateUser(UserData current) async {
     try {
-      if (uid == '') {
+      if (current.uuid == '') {
         throw Exception('Not a valid uid.');
       }
-      if (!(await isUserByUUID(uid))) {
-        throw Exception('No such user with uid $uid exists.');
+      if (!(await isUserByUUID(current.uuid))) {
+        throw Exception('No such user with uid $current.uuid exists.');
       }
-      UserData user = await getUserByUUID(uid);
-      userDB.doc(user.uuid).set({'name': user.name, 'ratings': user.ratings});
+      userDB
+          .doc(current.uuid)
+          .set({'name': current.name, 'ratings': current.ratings});
     } catch (err) {
       // ignore: avoid_print
       print(err.toString());

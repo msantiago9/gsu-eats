@@ -67,18 +67,19 @@ class SignUp extends StatelessWidget {
                     margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        bool success = await context.read<AuthService>().signUp(
-                              email: email.text,
-                              password: password.text,
-                            );
-                        if (!success) {
+                        String success =
+                            await context.read<AuthService>().signUp(
+                                  email: email.text,
+                                  password: password.text,
+                                );
+                        if (success == "error") {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Sign up failed.'),
                             ),
                           );
                         } else {
-                          await DBServ().addUser(name.text, context);
+                          await DBServ().addUser(name.text, success, context);
                           Navigator.pop(context);
                         }
                       },

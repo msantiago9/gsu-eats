@@ -3,6 +3,7 @@ import 'package:gsu_eats/tools/dbhandler.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gsu_eats/models/restaurant.dart';
 import 'package:uuid/uuid.dart';
+import 'package:gsu_eats/models/globals.dart' as globals;
 
 class Admin extends StatefulWidget {
   const Admin({Key? key}) : super(key: key);
@@ -13,8 +14,13 @@ class Admin extends StatefulWidget {
 
 class _AdminState extends State<Admin> {
   final dbserve = DBServ();
-  final name = TextEditingController();
-  List<int> ratings = [3, 3, 3];
+  TextEditingController name = TextEditingController();
+  TextEditingController comment = TextEditingController();
+  TextEditingController details = TextEditingController();
+  TextEditingController img = TextEditingController();
+  TextEditingController lat = TextEditingController();
+  TextEditingController long = TextEditingController();
+  List<int> ratings = [3];
   List<Widget> restaurants = [];
   bool hasSearched = false;
 
@@ -102,39 +108,58 @@ class _AdminState extends State<Admin> {
                 ),
               ),
               Container(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                 margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                child: RatingBar.builder(
-                  initialRating: 3,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: false,
-                  itemCount: 5,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
+                child: TextField(
+                  controller: comment,
+                  decoration: const InputDecoration(
+                    labelText: "Add a comment",
                   ),
-                  onRatingUpdate: (rating) {
-                    ratings[1] = rating.round();
-                  },
+                  autocorrect: false,
                 ),
               ),
               Container(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                 margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                child: RatingBar.builder(
-                  initialRating: 3,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: false,
-                  itemCount: 5,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
+                child: TextField(
+                  controller: img,
+                  decoration: const InputDecoration(
+                    labelText: "Add the restaurant's image.",
                   ),
-                  onRatingUpdate: (rating) {
-                    ratings[2] = rating.round();
-                  },
+                  autocorrect: false,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: TextField(
+                  controller: lat,
+                  decoration: const InputDecoration(
+                    labelText: "Add the latitude.",
+                  ),
+                  autocorrect: false,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: TextField(
+                  controller: long,
+                  decoration: const InputDecoration(
+                    labelText: "Add the longitude.",
+                  ),
+                  autocorrect: false,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: TextField(
+                  controller: details,
+                  decoration: const InputDecoration(
+                    labelText: "Add a small bio about the restaurant.",
+                  ),
+                  autocorrect: false,
                 ),
               ),
               Container(
@@ -142,9 +167,15 @@ class _AdminState extends State<Admin> {
                 child: ElevatedButton(
                   onPressed: () {
                     Restaurant toDatabase = Restaurant(
-                        uuid: const Uuid().v4(),
-                        name: name.text,
-                        ratings: ratings);
+                      uuid: const Uuid().v4(),
+                      name: name.text,
+                      ratings: ratings,
+                      comments: {globals.name: comment.text},
+                      details: details.text,
+                      img: img.text,
+                      latitude: lat.text,
+                      longitude: long.text,
+                    );
                     bool success = dbserve.addRestaurant(toDatabase, context);
                     if (success && hasSearched) {
                       _updateRestaurantsList(toDatabase);

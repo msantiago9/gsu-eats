@@ -9,7 +9,7 @@ class DBServ {
   CollectionReference userDB = FirebaseFirestore.instance.collection('users');
 
   CollectionReference restaurantDB =
-      FirebaseFirestore.instance.collection('restaurants');
+      FirebaseFirestore.instance.collection('places');
 
   // Since we no user first name and last name implemented yet, this function cannot be set.
   // Future update(String fname, String lname, String type) async {
@@ -25,9 +25,15 @@ class DBServ {
       if (restaurant.name == '') {
         throw Exception('No name');
       }
-      restaurantDB
-          .doc(restaurantID)
-          .set({'name': restaurant.name, 'ratings': restaurant.ratings});
+      restaurantDB.doc(restaurantID).set({
+        'name': restaurant.name,
+        'img': restaurant.img,
+        'details': restaurant.details,
+        'ratings': restaurant.ratings,
+        'comments': restaurant.comments,
+        'latitude': restaurant.latitude,
+        'longitude': restaurant.longitude,
+      });
     } catch (err) {
       String msg = 'Adding Restaurant failed... $err';
       ScaffoldMessenger.of(context).showSnackBar(
@@ -47,7 +53,16 @@ class DBServ {
         return current;
       }
     }
-    return Restaurant(uuid: '', name: '', ratings: []);
+    return Restaurant(
+      uuid: '',
+      name: '',
+      ratings: [],
+      comments: {},
+      details: '',
+      img: '',
+      latitude: '',
+      longitude: '',
+    );
   }
 
   Future<Restaurant> getRestaurantByUUID(String uuid) async {
@@ -57,7 +72,16 @@ class DBServ {
         return current;
       }
     }
-    return Restaurant(uuid: '', name: '', ratings: []);
+    return Restaurant(
+      uuid: '',
+      name: '',
+      ratings: [],
+      comments: {},
+      details: '',
+      img: '',
+      latitude: '',
+      longitude: '',
+    );
   }
 
   Future<List<Restaurant>> getRestaurants() async {
@@ -90,27 +114,49 @@ class DBServ {
   List<Restaurant> _restaurantListFromSnapshot(QuerySnapshot snap) {
     List<Restaurant> mylist = [];
     for (var element in snap.docs) {
-      String uuid = element.id;
-      String name = element.get('name');
-      List<dynamic> ratings = element.get('ratings');
-      mylist.add(Restaurant(
-          uuid: uuid,
-          name: name,
-          ratings: ratings.map((s) => int.parse(s.toString())).toList()));
+      // print(element.data());
+      try {
+        String uuid = element.id;
+        String name = element.get('name');
+        String details = element.get('details');
+        String img = element.get('img');
+        String lat = element.get('latitude');
+        String long = element.get('longitude');
+        List<dynamic> ratings = element.get('ratings');
+        Map<String, String> comments =
+            Map<String, String>.from(element.get('comments'));
+        mylist.add(
+          Restaurant(
+            uuid: uuid,
+            name: name,
+            ratings: ratings.map((s) => int.parse(s.toString())).toList(),
+            comments: comments,
+            details: details,
+            img: img,
+            latitude: lat,
+            longitude: long,
+          ),
+        );
+      } catch (err) {
+        String msg = err.toString();
+        // ignore: avoid_print
+        print("error was thrown... $msg");
+        continue;
+      }
     }
     return mylist;
   }
 
   Future addUser(String name, String uid, context) async {
     //By default, the user is set to rate Subway at 1 star.
-    Map<String, int> ratings = <String, int>{'6JBZPvJLAbhR6ucjv0Up': 1};
+    Map<String, int> ratings = <String, int>{'LiBCFqJmH3llBPYRk2RF': 1};
     try {
       if (name == '') {
         throw Exception('No name');
       }
       userDB.doc(uid).set({'name': name, 'ratings': ratings});
     } catch (err) {
-      String msg = 'Adding Restaurant failed... $err';
+      String msg = 'Adding User failed... $err';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(msg),
@@ -165,9 +211,15 @@ class DBServ {
         throw Exception(
             'No such restaurant with name $restaurant.name exists.');
       }
-      restaurantDB
-          .doc(restaurant.uuid)
-          .set({'name': restaurant.name, 'ratings': restaurant.ratings});
+      restaurantDB.doc(restaurant.uuid).set({
+        'name': restaurant.name,
+        'img': restaurant.img,
+        'details': restaurant.details,
+        'ratings': restaurant.ratings,
+        'comments': restaurant.comments,
+        'latitude': restaurant.latitude,
+        'longitude': restaurant.longitude,
+      });
     } catch (err) {
       // ignore: avoid_print
       print(err.toString());

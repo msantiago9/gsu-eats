@@ -28,7 +28,8 @@ class Login extends StatelessWidget {
             color: Colors.white.withOpacity(.95),
           ),
           constraints: const BoxConstraints(
-            maxHeight: 450,
+            minHeight: 450,
+            maxHeight: 550,
           ),
           child: Column(
             //mainAxisSize: MainAxisSize.max,

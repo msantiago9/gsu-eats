@@ -13,8 +13,9 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.all(20),
+        body: Container(
+      margin: const EdgeInsets.all(20),
+      child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,8 +23,8 @@ class SignUp extends StatelessWidget {
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Image.asset(
-                "assets/gsulogo.png",
-                height: 100,
+                "assets/GSUEatsT.png",
+                height: 265,
               ),
             ),
             Container(
@@ -31,7 +32,7 @@ class SignUp extends StatelessWidget {
               child: const Text(
                 'Sign Up',
                 style: TextStyle(
-                  fontFamily: 'Kurale',
+                  fontFamily: 'Times',
                   fontSize: 20,
                 ),
               ),
@@ -39,7 +40,7 @@ class SignUp extends StatelessWidget {
             TextField(
               controller: email,
               decoration: const InputDecoration(
-                labelText: "email",
+                labelText: "E-mail",
               ),
               autocorrect: false,
             ),
@@ -66,6 +67,10 @@ class SignUp extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red, // background
+                        onPrimary: Colors.white, // foreground
+                      ),
                       onPressed: () async {
                         String success =
                             await context.read<AuthService>().signUp(
@@ -89,6 +94,10 @@ class SignUp extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red, // background
+                      onPrimary: Colors.white, // foreground
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -102,6 +111,6 @@ class SignUp extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

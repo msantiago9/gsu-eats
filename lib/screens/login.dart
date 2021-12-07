@@ -22,14 +22,14 @@ class Login extends StatelessWidget {
         alignment: Alignment.center,
         margin: const EdgeInsets.all(20),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
             color: Colors.white.withOpacity(.95),
           ),
           constraints: const BoxConstraints(
             minHeight: 450,
-            maxHeight: 550,
+            maxHeight: 650,
           ),
           child: Column(
             //mainAxisSize: MainAxisSize.max,

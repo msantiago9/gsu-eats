@@ -53,56 +53,58 @@ class _PopularState extends State<Popular> {
       ),
       body: Container(
         margin: const EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(5, 15, 5, 15),
-              child: const Text('Most Popular Restaurants'),
-            ),
-            ListView.builder(
-              itemCount: list.length,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    leading: Image.network(list[index].img, width: 50),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text((list[index].ratings.reduce(
-                                    (value, element) => value + element) /
-                                list[index].ratings.length)
-                            .toString()),
-                        const Icon(Icons.star),
-                      ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(5, 15, 5, 15),
+                child: const Text('Most Popular Restaurants'),
+              ),
+              ListView.builder(
+                itemCount: list.length,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      leading: Image.network(list[index].img, width: 50),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text((list[index].ratings.reduce(
+                                      (value, element) => value + element) /
+                                  list[index].ratings.length)
+                              .toString()),
+                          const Icon(Icons.star),
+                        ],
+                      ),
+                      title: Text(list[index].name),
+                      subtitle: Text(list[index].details),
+                      onTap: () async {
+                        if (await DBServ().isRestaurant(list[index].name)) {
+                          Restaurant restaurant =
+                              await DBServ().getRestaurant(list[index].name);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  RestaurantPage(restaurant: restaurant),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('No restaurant found.'),
+                            ),
+                          );
+                        }
+                      },
                     ),
-                    title: Text(list[index].name),
-                    subtitle: Text(list[index].details),
-                    onTap: () async {
-                      if (await DBServ().isRestaurant(list[index].name)) {
-                        Restaurant restaurant =
-                            await DBServ().getRestaurant(list[index].name);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                RestaurantPage(restaurant: restaurant),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('No restaurant found.'),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         height: double.infinity,
         width: double.infinity,

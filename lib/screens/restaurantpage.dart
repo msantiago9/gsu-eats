@@ -3,7 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gsu_eats/models/restaurant.dart';
 import 'package:gsu_eats/models/user.dart';
 import 'package:gsu_eats/models/globals.dart' as globals;
-import 'package:gsu_eats/screens/googlemaps.dart';
+import 'package:gsu_eats/screens/maps.dart';
 
 class RestaurantPage extends StatefulWidget {
   final Restaurant restaurant;
@@ -95,7 +95,7 @@ class _RestaurantState extends State<RestaurantPage> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                 child: Text(
                   restaurant.details,
                 ),
@@ -126,8 +126,7 @@ class _RestaurantState extends State<RestaurantPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            GoogleMapsPage(restaurant: restaurant),
+                        builder: (context) => MapsPage(restaurant: restaurant),
                       ),
                     );
                   },

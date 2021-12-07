@@ -53,8 +53,8 @@ dependencies:
   responsive_grid: ^2.0.0
   smooth_star_rating: ^1.1.1
 
-  #google maps specific
-  google_maps_flutter: ^2.1.1
+  #maps
+  flutter_map: ^0.14.0
 
 dev_dependencies:
   flutter_test:

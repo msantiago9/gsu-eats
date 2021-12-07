@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
                   ),
                 );
               },
-              child: const Text("Admin"),
+              child: const Text("Add a Restaurant"),
             ),
           ),
         ],

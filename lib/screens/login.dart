@@ -11,78 +11,98 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Image.asset(
-              "assets/gsulogo.png",
-              height: 150,
-            ),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/bg1.jpg"),
+          fit: BoxFit.cover,
+          opacity: 0.85,
+        ),
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        margin: const EdgeInsets.all(20),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0),
+            color: Colors.white.withOpacity(.95),
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: const Text(
-              'Food Reviews',
-              style: TextStyle(
-                fontFamily: 'Kurale',
-                fontSize: 20,
+          constraints: const BoxConstraints(
+            maxHeight: 450,
+          ),
+          child: Column(
+            //mainAxisSize: MainAxisSize.max,
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Image.asset(
+                  "assets/gsulogo.png",
+                  height: 150,
+                ),
               ),
-            ),
-          ),
-          TextField(
-            controller: email,
-            decoration: const InputDecoration(
-              labelText: "email",
-            ),
-            autocorrect: false,
-          ),
-          TextField(
-            controller: password,
-            decoration: const InputDecoration(
-              labelText: "Password",
-            ),
-            obscureText: true,
-            autocorrect: false,
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await context
-                          .read<AuthService>()
-                          .signIn(email.text, password.text, context);
-                    },
-                    child: const Text(
-                      "Login",
-                    ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: const Text(
+                  'Food Reviews',
+                  style: TextStyle(
+                    fontFamily: 'Kurale',
+                    fontSize: 20,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignUp(),
+              ),
+              TextField(
+                controller: email,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                ),
+                autocorrect: false,
+              ),
+              TextField(
+                controller: password,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                ),
+                obscureText: true,
+                autocorrect: false,
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await context
+                              .read<AuthService>()
+                              .signIn(email.text, password.text, context);
+                        },
+                        child: const Text(
+                          "Login",
+                        ),
                       ),
-                    );
-                  },
-                  child: const Text(
-                    "Sign Up",
-                  ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUp(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Sign Up",
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

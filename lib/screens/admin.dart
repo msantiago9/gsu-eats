@@ -73,7 +73,7 @@ class _AdminState extends State<Admin> {
                 child: const Text(
                   "Enter a new restaurant",
                   style: TextStyle(
-                    fontFamily: 'Kurale',
+                    fontFamily: 'Roboto',
                     fontSize: 20,
                   ),
                 ),
@@ -194,7 +194,7 @@ class _AdminState extends State<Admin> {
                 child: const Text(
                   "Get All Restaurants in Firestore",
                   style: TextStyle(
-                    fontFamily: 'Kurale',
+                    fontFamily: 'Roboto',
                     fontSize: 20,
                   ),
                 ),

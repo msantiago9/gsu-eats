@@ -80,7 +80,7 @@ class _RestaurantState extends State<RestaurantPage> {
                 child: Text(
                   '- ' + restaurant.name + ' -',
                   style: const TextStyle(
-                    fontFamily: 'Kurale',
+                    fontFamily: 'Roboto',
                     fontSize: 20,
                   ),
                 ),
@@ -203,7 +203,7 @@ class _RestaurantState extends State<RestaurantPage> {
                 child: const Text(
                   "Comments",
                   style: TextStyle(
-                    fontFamily: 'Kurale',
+                    fontFamily: 'Roboto',
                     fontSize: 20,
                   ),
                 ),

@@ -32,7 +32,7 @@ class SignUp extends StatelessWidget {
               child: const Text(
                 'Sign Up',
                 style: TextStyle(
-                  fontFamily: 'Times',
+                  fontFamily: 'Roboto',
                   fontSize: 20,
                 ),
               ),

@@ -54,7 +54,7 @@ class _RecommendedState extends State<Recommended> {
             const Text(
               "Your Favorites",
               style: TextStyle(
-                fontFamily: 'Kurale',
+                fontFamily: 'Roboto',
                 fontSize: 20,
               ),
             ),

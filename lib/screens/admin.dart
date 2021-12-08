@@ -84,7 +84,7 @@ class _AdminState extends State<Admin> {
                 child: TextField(
                   controller: name,
                   decoration: const InputDecoration(
-                    labelText: "restaurant name",
+                    labelText: "Restaurant name",
                   ),
                   autocorrect: false,
                 ),

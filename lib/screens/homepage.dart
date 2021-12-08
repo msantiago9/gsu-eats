@@ -52,8 +52,8 @@ class _HomeState extends State<Home> {
               primary: Colors.white,
               onPrimary: Colors.green,
               onSurface: Colors.blue,
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
             label: const Text('Find Somewhere To Eat',
@@ -65,50 +65,59 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        Column(
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.fastfood),
-              color: Colors.red,
-              tooltip: 'Popular',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Popular(),
-                  ),
-                );
-              },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.fastfood),
+                  color: Colors.red,
+                  tooltip: 'Popular',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Popular(),
+                      ),
+                    );
+                  },
+                ),
+                const Text('Popular'),
+              ],
             ),
-            const Text('Popular'),
-            IconButton(
-              icon: const Icon(Icons.favorite),
-              color: Colors.red,
-              tooltip: 'Recommended',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Recommended(),
-                  ),
-                );
-              },
-            ),
-            const Text('Favorites'),
-            IconButton(
-              icon: const Icon(Icons.library_add),
-              color: Colors.red,
-              tooltip: 'Add a Restaurant',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Admin(),
-                  ),
-                );
-              },
-            ),
-            const Text('Add a Location'),
+            Column(children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.favorite),
+                color: Colors.red,
+                tooltip: 'Recommended',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Recommended(),
+                    ),
+                  );
+                },
+              ),
+              const Text('Favorites'),
+            ]),
+            Column(children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.library_add),
+                color: Colors.red,
+                tooltip: 'Add a Restaurant',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Admin(),
+                    ),
+                  );
+                },
+              ),
+              const Text('Add a Location'),
+            ]),
           ],
         ),
       ],

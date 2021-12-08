@@ -71,7 +71,8 @@ class _RecommendedState extends State<Recommended> {
                           Text((list[index].ratings.reduce(
                                       (value, element) => value + element) /
                                   list[index].ratings.length)
-                              .toString()),
+                              //.toString()
+                              .toStringAsFixed(2)), //Two decimal places round
                           const Icon(Icons.star),
                         ],
                       ),

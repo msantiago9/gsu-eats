@@ -1,6 +1,6 @@
 # gsu_eats
 
-[![(https://i.imgur.com/wnyBGLm.jpg)](https://i.imgur.com/wnyBGLm.jpg)](https://i.imgur.com/wnyBGLm.jpg)
+[![(https://i.imgur.com/S3iak9t.png)](https://i.imgur.com/e7Qo6Jr.png)](https://i.imgur.com/eud2711.png)
 
 ## Dev Diary
 

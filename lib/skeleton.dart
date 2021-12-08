@@ -61,6 +61,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
         globals.ratings = current.ratings;
       });
       return Scaffold(
+        backgroundColor: Colors.blue.shade50,
         appBar: AppBar(
           actions: [
             IconButton(
@@ -77,12 +78,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
             ),
           ],
           backgroundColor: Colors.green,
-          title: const Text('Hello World'),
+          title: const Text('GSU Eats'),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-                Colors.cyan.shade400,
-                Colors.cyan.shade200,
+                Colors.blue.shade500,
+                Colors.blue.shade200,
               ], stops: const [
                 0,
                 1.0,

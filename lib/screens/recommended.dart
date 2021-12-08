@@ -44,7 +44,7 @@ class _RecommendedState extends State<Recommended> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Recommended"),
+        title: const Text("Favorited Restaurants"),
       ),
       body: Container(
         margin: const EdgeInsets.all(15),

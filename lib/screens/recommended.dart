@@ -18,10 +18,12 @@ class _RecommendedState extends State<Recommended> {
   void initState() {
     super.initState();
     List<String> uuids = [];
-    for (String element in globals.ratings.keys) {
-      uuids.add(element);
+    for (String uuid in globals.ratings.keys) {
+      int minimumStars = 4;
+      if (globals.ratings[uuid]! >= minimumStars) {
+        uuids.add(uuid);
+      }
     }
-    print(uuids);
     populateList(uuids);
   }
 
@@ -46,10 +48,11 @@ class _RecommendedState extends State<Recommended> {
       ),
       body: Container(
         margin: const EdgeInsets.all(15),
+        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
         child: Column(
           children: [
             const Text(
-              "Favorites!",
+              "Your Favorites",
               style: TextStyle(
                 fontFamily: 'Kurale',
                 fontSize: 20,
@@ -77,7 +80,8 @@ class _RecommendedState extends State<Recommended> {
                         ],
                       ),
                       title: Text(list[index].name),
-                      subtitle: Text(list[index].details),
+                      subtitle: Text("Your rating: " +
+                          (globals.ratings[list[index].uuid]).toString()),
                       onTap: () async {
                         if (await DBServ().isRestaurant(list[index].name)) {
                           Restaurant restaurant =

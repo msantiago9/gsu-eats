@@ -100,7 +100,7 @@ class _PopularState extends State<Popular> {
                           Text((list[index].ratings.reduce(
                                       (value, element) => value + element) /
                                   list[index].ratings.length)
-                              .toString()),
+                              .toStringAsFixed(2)),
                           const Icon(Icons.star),
                         ],
                       ),

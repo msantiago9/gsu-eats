@@ -12,48 +12,61 @@ class Search extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("search"),
+        title: const Text("Search"),
       ),
       body: Center(
         child: Container(
           margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-                child: TextField(
-                  controller: query,
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                    labelText: "\"Dunkin' Donuts\"",
-                    alignLabelWithHint: true,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Image.asset(
+                    "assets/GSUEatsT.png",
+                    height: 265,
                   ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (await dbserve.isRestaurant(query.text)) {
-                    Restaurant restaurant =
-                        await dbserve.getRestaurant(query.text);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            RestaurantPage(restaurant: restaurant),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('No restaurant found.'),
-                      ),
-                    );
-                  }
-                },
-                child: const Text("Search"),
-              ),
-            ],
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                  child: TextField(
+                    controller: query,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                      labelText: "\"Dunkin' Donuts\"",
+                      alignLabelWithHint: true,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red, // background
+                    onPrimary: Colors.white, // foreground
+                  ),
+                  onPressed: () async {
+                    if (await dbserve.isRestaurant(query.text)) {
+                      Restaurant restaurant =
+                          await dbserve.getRestaurant(query.text);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              RestaurantPage(restaurant: restaurant),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No restaurant found.'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text("Search"),
+                ),
+              ],
+            ),
           ),
           decoration: BoxDecoration(
             color: Colors.white,

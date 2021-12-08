@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gsu_eats/models/restaurant.dart';
 import 'package:gsu_eats/screens/restaurantpage.dart';
@@ -59,6 +60,31 @@ class _PopularState extends State<Popular> {
               Container(
                 margin: const EdgeInsets.fromLTRB(5, 15, 5, 15),
                 child: const Text('Most Popular Restaurants'),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(5, 15, 5, 15),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                  ),
+                  items: list
+                      .map((e) => ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              Image.network(
+                                e.img,
+                                width: 1000,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              )
+                            ],
+                          )))
+                      .toList(),
+                ),
               ),
               ListView.builder(
                 itemCount: list.length,

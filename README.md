@@ -6,6 +6,14 @@
 
 - Firebase login/sign up set up
 - Main page and navigation initialized
+- Search page set up
+- Add a restaurant set up
+- Splash screen set up
+- Login page updated
+- Main page updated
+- Popular page updated
+- Search updated
+- Recommended updated to Favorites
 
 ## Development
 
